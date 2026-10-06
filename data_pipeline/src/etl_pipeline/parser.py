@@ -1,3 +1,4 @@
+import re
 from dataclasses import dataclass
 from datetime import date
 import pdfplumber
@@ -90,7 +91,7 @@ class PdfParser:
     def remove_colontitles(self)->None:
         # count title occurences
         hashmap = {}
-        for i, el in enumerate(self.elements):
+        for el in self.elements:
             text = el.text.strip()
 
             if el.category == "Title":
@@ -99,7 +100,12 @@ class PdfParser:
         # remove repetetive titles (colontitles)    
         self.elements = [el for el in self.elements if el.category != "Title" or hashmap[el.text.strip()] <= 2]
                 
-        
+    def find_missing_titles(self)->None:
+        for el in self.elements:
+            is_title = bool(re.search(r"^\d+(\.\d+)*\.\s+[A-Z]", el.text.strip()))
+            if is_title:
+                el.category = "Title"
+
     def extract_elements(self):
         pdf_file_hash = get_file_hash(self.pdf_path)
 
@@ -130,6 +136,7 @@ class PdfParser:
         self.set_file_metadata()
         self.remove_below_abstract()
         self.remove_references()
+        self.find_missing_titles()
         self.remove_colontitles()
 
         structured_blocks = []
