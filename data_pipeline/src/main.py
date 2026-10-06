@@ -11,27 +11,28 @@ from data_pipeline.src.config import config
 def main():
     print("Starting...")
     # --- PHASE 1: INGESTION (PDF -> Qdrant) ---
-    pdf_path = get_raw_files()[0]
 
-
-
+    
     llm = LLamaCppLLM(base_url=config.LLAMA_BASE_URL)
     if not llm.available():
         raise Exception("llama cpp health is false")
-    parser = PdfParser(pdf_path)
-    elements = parser.extract_clean_text()
-
+    # ETL pripeline services
     chunker = Chunker(max_chars=3000)
-    chunks = chunker.create_chunks(elements)
-
     embedder = Embedder()
-    chunks = embedder.embed_chunks(chunks)
-
-
-
     repo = VectorRepository()
-    repo.upsert_chunks(chunks, source=pdf_path.stem)
-    print(f"Successfully indexed {len(chunks)} chunks into Qdrant.")
+    for file in get_raw_files():
+
+        parser = PdfParser(file)
+        elements = parser.extract_clean_text()
+
+        
+        chunks = chunker.create_chunks(elements)
+
+        chunks = embedder.embed_chunks(chunks)
+
+
+        repo.upsert_chunks(chunks, source=file.stem)
+        print(f"Successfully indexed {len(chunks)} chunks into Qdrant.")
 
     # --- PHASE 2: RETRIEVAL & PROMPT GENERATION ---
 
