@@ -1,0 +1,206 @@
+[
+  {
+    "id": 1,
+    "question": "What does the proposed architecture do away with compared to earlier sequence models?",
+    "expect": "dispensing with recurrence and convolutions entirely",
+    "type": "conceptual"
+  },
+  {
+    "id": 2,
+    "question": "How good was the result on French translation?",
+    "expect": "single-model state-of-the-art BLEU score of 41.8",
+    "type": "factual"
+  },
+  {
+    "id": 3,
+    "question": "Why can't older sequence models spread the work across many cores within one example?",
+    "expect": "inherently sequential nature precludes parallelization",
+    "type": "conceptual"
+  },
+  {
+    "id": 4,
+    "question": "Which earlier systems built on convolutional blocks to cut down sequential work?",
+    "expect": "Extended Neural GPU",
+    "type": "factual"
+  },
+  {
+    "id": 5,
+    "question": "Is there another name for self-attention?",
+    "expect": "sometimes called intra-attention",
+    "type": "factual"
+  },
+  {
+    "id": 6,
+    "question": "How deep is the encoder?",
+    "expect": "stack of N = 6 identical layers",
+    "type": "factual"
+  },
+  {
+    "id": 7,
+    "question": "What exactly is the output of one sub-layer?",
+    "expect": "LayerNorm(x + Sublayer(x))",
+    "type": "factual"
+  },
+  {
+    "id": 8,
+    "question": "How is the decoder stopped from peeking at future tokens?",
+    "expect": "prevent positions from attending to subsequent positions",
+    "type": "conceptual"
+  },
+  {
+    "id": 9,
+    "question": "In plain terms, what does an attention function do?",
+    "expect": "mapping a query and a set of key-value pairs to an output",
+    "type": "conceptual"
+  },
+  {
+    "id": 10,
+    "question": "Why divide before the softmax at all?",
+    "expect": "regions where it has extremely small gradients",
+    "type": "conceptual"
+  },
+  {
+    "id": 11,
+    "question": "Between the two common attention variants, which one runs faster in practice and why?",
+    "expect": "more space-efficient in practice",
+    "type": "comparative"
+  },
+  {
+    "id": 12,
+    "question": "How many heads run in parallel?",
+    "expect": "h = 8 parallel attention layers",
+    "type": "factual"
+  },
+  {
+    "id": 13,
+    "question": "What size does each individual head work with?",
+    "expect": "dmodel/h = 64",
+    "type": "factual"
+  },
+  {
+    "id": 14,
+    "question": "Where in the model is attention applied?",
+    "expect": "three different ways",
+    "type": "conceptual"
+  },
+  {
+    "id": 15,
+    "question": "How are forbidden connections blocked inside attention?",
+    "expect": "masking out",
+    "type": "conceptual"
+  },
+  {
+    "id": 16,
+    "question": "What nonlinearity sits between the two linear layers of the feed-forward block?",
+    "expect": "ReLU activation in between",
+    "type": "factual"
+  },
+  {
+    "id": 17,
+    "question": "How wide is the hidden layer of the feed-forward block?",
+    "expect": "dff = 2048",
+    "type": "factual"
+  },
+  {
+    "id": 18,
+    "question": "Are any weight matrices reused in more than one place?",
+    "expect": "share the same weight matrix between the two embedding layers",
+    "type": "factual"
+  },
+  {
+    "id": 19,
+    "question": "How does the model learn about token order without recurrence?",
+    "expect": "sine and cosine functions of different frequencies",
+    "type": "conceptual"
+  },
+  {
+    "id": 20,
+    "question": "Why prefer the fixed formulation over a learned one?",
+    "expect": "extrapolate to sequence lengths longer",
+    "type": "conceptual"
+  },
+  {
+    "id": 21,
+    "question": "Is there a table comparing cost per layer across layer types?",
+    "expect": "Maximum path lengths, per-layer complexity",
+    "type": "table"
+  },
+  {
+    "id": 22,
+    "question": "Under what condition does self-attention beat recurrence on speed?",
+    "expect": "smaller than the representation dimensionality",
+    "type": "comparative"
+  },
+  {
+    "id": 23,
+    "question": "How much data was used for the German task?",
+    "expect": "4.5 million sentence pairs",
+    "type": "factual"
+  },
+  {
+    "id": 24,
+    "question": "What machines did they train on?",
+    "expect": "8 NVIDIA P100 GPUs",
+    "type": "factual"
+  },
+  {
+    "id": 25,
+    "question": "Which optimizer was chosen and how was the learning rate varied?",
+    "expect": "Adam optimizer",
+    "type": "factual"
+  },
+  {
+    "id": 26,
+    "question": "How long is the warmup?",
+    "expect": "warmup_steps = 4000",
+    "type": "factual"
+  },
+  {
+    "id": 27,
+    "question": "What beam settings were used when decoding translations?",
+    "expect": "beam size of 4 and length penalty",
+    "type": "factual"
+  },
+  {
+    "id": 28,
+    "question": "How did the model score on the parsing benchmark in the semi-supervised setup?",
+    "expect": "semi-supervised 92.7",
+    "type": "table"
+  },
+  {
+    "id": 29,
+    "question": "Where can the training code be found?",
+    "expect": "github.com/",
+    "type": "factual"
+  },
+  {
+    "id": 30,
+    "question": "What future directions do the authors mention?",
+    "expect": "modalities other than text",
+    "type": "conceptual"
+  },
+  {
+    "id": 31,
+    "question": "How many parameters does GPT-3 have?",
+    "expect": null,
+    "type": "unanswerable"
+  },
+  {
+    "id": 32,
+    "question": "What was the electricity cost of training these models?",
+    "expect": null,
+    "type": "unanswerable"
+  },
+  {
+    "id": 33,
+    "question": "Which tokenizer does Llama 3 use?",
+    "expect": null,
+    "type": "unanswerable"
+  },
+  {
+    "id": 34,
+    "question": "How does the Transformer perform on speech recognition benchmarks?",
+    "expect": null,
+    "type": "unanswerable"
+  }
+]
