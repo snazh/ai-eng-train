@@ -19,7 +19,7 @@ EXCLUDED_CATEGORIES = {
     "Footnote",
     "PageBreak",
     "UncategorizedText",
-    "FigureCaption",
+    "Image",
 }
 
 
