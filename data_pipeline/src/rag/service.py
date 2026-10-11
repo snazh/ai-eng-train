@@ -16,14 +16,16 @@ class RagService:
         self.reranker = reranker
 
     def retrieve_context(
-        self, query: str, candidates: int = 20, top_k: int = 2
+        self, query: str, candidates: int = 20, top_k: int = 2, doc_name: str | None = None
     ) -> list[dict[str, Any]]:
         query_vector = self.embedder.embed_query(query)
         if not query_vector:
             return []
 
         # search in vector DB
-        documents = self.repository.search(query_vector=query_vector, limit=candidates)
+        documents = self.repository.search(
+            query_vector=query_vector, limit=candidates, doc_name=doc_name
+        )
 
         reranked_documents = self.reranker.rank(query, documents)
         return reranked_documents[:top_k]
@@ -31,9 +33,11 @@ class RagService:
     def build_prompt(self, query: str, context_docs: list[dict[str, Any]]) -> str:
         context_blocks = []
         for i, doc in enumerate(context_docs, 1):
-            title = doc.get("chunk_title") or "Untitled Section"
+            chunk_title = doc.get("chunk_title") or "Untitled Section"
+            doc_title = doc["metadata"]["title"] or doc["metadata"]["file_name"]
+            doc_title = doc_title.strip()
             context_blocks.append(
-                f"--- Document Chunk {i} [{title}, p. {doc['chunk_start_page']}-{doc['chunk_end_page']}] ---\n{doc['chunk_text']}"
+                f"--- Document Chunk {i} [{doc_title} — {chunk_title}, p. {doc['chunk_start_page']}-{doc['chunk_end_page']}] ---\n{doc['chunk_text']}"
             )
 
         context_str = "\n\n".join(context_blocks)
@@ -41,7 +45,7 @@ class RagService:
         prompt = f"""Answer the question using ONLY the context snippets below.
 
 Rules:
-- Cite the page after each statement, like this: [p. 4]
+- After each statement, cite the document title and page, like this: [Attention Is All You Need, p. 4]
 - If the context does not contain the answer, reply exactly: "Insufficient information in the provided context."
 - Do not use any knowledge outside the context.
 

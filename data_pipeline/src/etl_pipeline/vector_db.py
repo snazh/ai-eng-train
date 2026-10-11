@@ -76,10 +76,23 @@ class VectorRepository:
         if points:
             self.client.upsert(collection_name=self.collection_name, points=points)
 
-    def search(self, query_vector: list[float], limit: int = 3) -> list[dict[str, Any]]:
-        results = self.client.query_points(
-            collection_name=self.collection_name, query=query_vector, limit=limit
+    def search(
+        self, query_vector: list[float], limit: int = 3, doc_name: str | None = None
+    ) -> list[dict[str, Any]]:
+
+        f = (
+            None
+            if doc_name is None
+            else Filter(must=[FieldCondition(key="file_name", match=MatchValue(value=doc_name))])
         )
+
+        results = self.client.query_points(
+            collection_name=self.collection_name,
+            query=query_vector,
+            limit=limit,
+            query_filter=f,
+        )
+
         return [
             {
                 "score": hit.score,
